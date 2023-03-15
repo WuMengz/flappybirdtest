@@ -3,6 +3,7 @@ from collections import deque
 import copy
 import random
 import sys
+import time
 import pygame
 from pygame.locals import *
 
@@ -113,6 +114,8 @@ def main():
     # SOUNDS['point']  = pygame.mixer.Sound('assets/audio/point' + soundExt)
     # SOUNDS['swoosh'] = pygame.mixer.Sound('assets/audio/swoosh' + soundExt)
     # SOUNDS['wing']   = pygame.mixer.Sound('assets/audio/wing' + soundExt)
+
+    # time.sleep(1)
 
     while True:
         # select random background sprites
@@ -265,8 +268,13 @@ def mainGame(movementInfo):
     resume_from = 0
     current_score = STATE_HISTORY[-1][5] if resume_from_history else None  # reset if beats the latest score in history
     print_score = False  # has the current score been printed?
-
+    # start = time.time()
+    tick = 0
+    acts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     while True:
+        tick += 1
+        # print(time.time() - start)
+        # start = time.time()
         if resume_from_history:
             # Load from saved game history
             if resume_from < initial_len_history:
@@ -297,10 +305,24 @@ def mainGame(movementInfo):
                     # SOUNDS['wing'].play()
 
         # Agent to perform an action (0 is do nothing, 1 is flap)
-        if Agent.act(playerx, playery, playerVelY, lowerPipes):
+        # timea = time.time()
+        nowact = Agent.act(playerx, playery, playerVelY, lowerPipes)
+        delay = 1
+        if nowact: 
+            for i in range(delay, 100):
+                if not acts[i]:
+                    acts[i] = 1
+                    break
+        now = acts[0]
+        acts = acts[1:]
+        acts.append(0)
+        # print(now)
+
+        if now:
             if playery > -2 * IMAGES['player'][0].get_height():
                 playerVelY = playerFlapAcc
                 playerFlapped = True
+        # print("agent time:", time.time() - timea)
 
         # check for crash here
         crashTest = checkCrash({'x': playerx, 'y': playery, 'index': playerIndex},
@@ -434,6 +456,7 @@ def mainGame(movementInfo):
             SCREEN.blit(playerSurface, (playerx, playery))
 
             pygame.display.update()
+            # print("use time", time.time() - start)
             FPSCLOCK.tick(FPS)
 
 
