@@ -87,9 +87,9 @@ class QLearning:
 
             # Epsilon greedy policy for action, chance to explore
             # Remove since exploration is not efficient or required for this agent and environment
-            # if random.random() <= self.epsilon:
-            #     self.previous_action = random.choice([0, 1])
-            #     return self.previous_action
+            if random.random() <= self.epsilon:
+                self.previous_action = random.choice([0, 1])
+                return self.previous_action
 
         # Best action with respect to current state, default is 0 (do nothing), 1 is flap
         self.previous_action = 0 if self.q_values[state][0] >= self.q_values[state][1] else 1

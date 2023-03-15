@@ -315,19 +315,19 @@ def mainGame(movementInfo):
         # Agent to perform an action (0 is do nothing, 1 is flap)
         # timea = time.time()
         nowact = Agent.act(playerx, playery, playerVelY, lowerPipes)
-        delay = random.randint(0, 2)
-        if nowact: 
-            #acts[delay] = 1
-            for i in range(delay, 100):
-                if not acts[i]:
-                    acts[i] = 1
-                    break
-        now = acts[0]
-        acts = acts[1:]
-        acts.append(0)
+        #delay = random.randint(0, 5)
+        #if nowact: 
+        #    acts[delay] = 1
+            #for i in range(delay, 100):
+            #    if not acts[i]:
+            #        acts[i] = 1
+            #        break
+        #now = acts[0]
+        #acts = acts[1:]
+        #acts.append(0)
         # print(now)
 
-        if now:
+        if nowact:
             if playery > -2 * IMAGES['player'][0].get_height():
                 playerVelY = playerFlapAcc
                 playerFlapped = True
