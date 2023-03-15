@@ -315,7 +315,7 @@ def mainGame(movementInfo):
         # Agent to perform an action (0 is do nothing, 1 is flap)
         # timea = time.time()
         nowact = Agent.act(playerx, playery, playerVelY, lowerPipes)
-        delay = random.randint(0, 1)
+        delay = random.randint(0, 2)
         if nowact: 
             acts[delay] = 1
             #for i in range(delay, 100):
