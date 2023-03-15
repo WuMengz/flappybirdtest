@@ -16,7 +16,7 @@ Agent = QLearning(config['train'])
 if Agent.train:
     print("Training agent...")
 else:
-    print("Running agent...")
+    print("Running agent....")
 
 
 # Back to game
