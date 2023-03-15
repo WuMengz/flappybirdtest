@@ -22,6 +22,14 @@ else:
 
 # Back to game
 
+scores = []
+
+def printscore():
+    global scores
+    scores = sorted(scores)
+    print("average =", sum(scores) / len(scores))
+    print("midian =", scores[len(scores) // 2])
+
 FPS = 30
 SCREENWIDTH = 288
 SCREENHEIGHT = 512
@@ -307,7 +315,7 @@ def mainGame(movementInfo):
         # Agent to perform an action (0 is do nothing, 1 is flap)
         # timea = time.time()
         nowact = Agent.act(playerx, playery, playerVelY, lowerPipes)
-        delay = 1
+        delay = random.randint(0, 1)
         if nowact: 
             for i in range(delay, 100):
                 if not acts[i]:
@@ -352,6 +360,10 @@ def mainGame(movementInfo):
                 print(f"Episode: {Agent.episode}, alpha: {Agent.alpha}, score: {score}, max_score: {Agent.max_score}")
             else:
                 print(f"Episode: {Agent.episode}, score: {score}, max_score: {Agent.max_score}")
+            global scores
+            scores.append(score)
+            if len(scores) % 100 == 0:
+                printscore()
             return {
                 'y': playery,
                 'groundCrash': crashTest[1],
