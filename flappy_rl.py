@@ -280,7 +280,13 @@ def mainGame(movementInfo):
     tick = 0
     acts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     while True:
+        # input()
+        # print(lowerPipes)
         tick += 1
+        # if tick > 100:
+        #    input()
+        #    pass
+            
         # print(time.time() - start)
         # start = time.time()
         if resume_from_history:
@@ -314,20 +320,42 @@ def mainGame(movementInfo):
 
         # Agent to perform an action (0 is do nothing, 1 is flap)
         # timea = time.time()
-        nowact = Agent.act(playerx, playery, playerVelY, lowerPipes)
-        #delay = random.randint(0, 5)
-        #if nowact: 
-        #    acts[delay] = 1
+        playerVelY_ = playerVelY
+        if playerVelY_ < playerMaxVelY:
+            playerVelY_ += playerAccY
+        playerHeight_ = IMAGES['player'][playerIndex].get_height()
+        playery_ = playery + min(playerVelY_, BASEY - playery - playerHeight_)
+
+        if playerVelY_ < playerMaxVelY:
+            playerVelY_ += playerAccY
+        playery_ += min(playerVelY_, BASEY - playery_ - playerHeight_)    
+
+        if playerVelY_ < playerMaxVelY:
+            playerVelY_ += playerAccY
+        playery_ += min(playerVelY_, BASEY - playery_ - playerHeight_)    
+
+        # print(playerx, playery, playerVelY, lowerPipes)
+        delay = 3
+        lowerPipes_ = [lowerPipes[i].copy() for i in range(len(lowerPipes))]
+        for i in range(len(lowerPipes_)):
+            lowerPipes_[i]["x"] += delay * pipeVelX
+        if lowerPipes_[0]['x'] < -IMAGES['pipe'][0].get_width():
+            lowerPipes_.pop(0)
+
+        nowact = Agent.act(playerx, playery_, playerVelY_, lowerPipes_)
+        if nowact: 
+            acts[delay] = 1
             #for i in range(delay, 100):
             #    if not acts[i]:
             #        acts[i] = 1
             #        break
-        #now = acts[0]
-        #acts = acts[1:]
-        #acts.append(0)
+        now = acts[0]
+        acts = acts[1:]
+        acts.append(0)
         # print(now)
 
-        if nowact:
+        if now:
+            acts[0] = acts[1] = acts[2] = 0
             if playery > -2 * IMAGES['player'][0].get_height():
                 playerVelY = playerFlapAcc
                 playerFlapped = True
